@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Testing Playground - OBVIOUS UI FLAWS</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        margin: 20px;
+        padding: 0;
+        background-color: #f8f8f8;
+        color: #333;
+        line-height: 1.6;
+      }
+      header {
+        background-color: #2c3e50;
+        color: #fff;
+        padding: 20px 0;
+        text-align: center;
+        margin-bottom: 30px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .container {
+        max-width: 900px;
+        margin: auto;
+        background: #fff;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+      }
+
+      h1,
+      h2 {
+        color: #3498db;
+        margin-bottom: 15px;
+      }
+
+      .form-section,
+      .gallery-section {
+        margin-bottom: 40px;
+        padding: 25px;
+        border: 1px solid #e0e0e0;
+        border-radius: 10px;
+        background-color: #f9f9f9;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #555;
+      }
+
+      .form-group input,
+      .form-group textarea,
+      .form-group select {
+        width: calc(100% - 24px);
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        box-sizing: border-box;
+        font-size: 1rem;
+        transition: border-color 0.2s ease;
+      }
+
+      .form-group input::placeholder,
+      .form-group textarea::placeholder {
+        color: #aaa !important;
+      }
+
+      .form-group input:focus,
+      .form-group textarea:focus,
+      .form-group select:focus {
+        border-color: #3498db;
+        outline: none;
+      }
+
+      /* EXAGGERATED UI FLAW: Email field pushed way to the right */
+      #email {
+        margin-left: 50px !important;
+      }
+
+      .form-group textarea {
+        resize: vertical;
+        min-height: 120px;
+      }
+
+      .form-group button {
+        background-color: #3498db;
+        color: white;
+        padding: 12px 25px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: background-color 0.2s ease;
+      }
+
+      /* EXAGGERATED UI FLAW: Submit button hover now disappears */
+      .form-group button:hover {
+        background-color: #2980b9;
+      }
+
+      .gallery {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 20px;
+      }
+
+      .gallery-item {
+        border: 1px solid #e0e0e0;
+        border-radius: 10px;
+        overflow: hidden;
+        text-align: center;
+        background-color: #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .gallery-item:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      }
+
+      .gallery-item img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        display: block;
+      }
+
+      .gallery-item p {
+        padding: 15px;
+        margin: 0;
+        font-size: 1.05rem;
+        color: #555;
+      }
+
+      .loading-spinner {
+        border: 5px solid #f3f3f3;
+        border-top: 5px solid #3498db;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+        display: none;
+        margin: 25px auto;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      footer {
+        text-align: center;
+        padding: 25px;
+        margin-top: 50px;
+        color: #777;
+        border-top: 1px solid #eee;
+        font-size: 0.9rem;
+      }
+
+      /* EXAGGERATED UI FLAW: Footer text now HUGE and italicized */
+      footer p {
+        font-size: 2em;
+        font-style: italic;
+        text-align: center !important; /* Force override */
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Welcome to the Testing Playground!</h1>
+      <p>
+        A simple web app for exploratory and performance testing with real
+        content.
+      </p>
+    </header>
+    <div class="container">
+      <div
+        class="overlap-text"
+        style="
+          background-color: #f0f8ff;
+          padding: 10px;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+          margin-bottom: 20px;
+        "
+      >
+        Follow us on social media | Click to scroll up to the top
+      </div>
+
+      <section class="form-section">
+        <h2>Contact Us</h2>
+        <form id="contactForm">
+          <div class="form-group">
+            <label for="name">Name:</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              placeholder="Your Name"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="email">Email:</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="your.email@example.com"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="subject">Subject:</label>
+            <select id="subject" name="subject">
+              <option value="">--Please choose an option--</option>
+              <option value="general">General Inquiry</option>
+              <option value="support">Support</option>
+              <option value="feedback">Feedback</option>
+              <option value="bug">Bug Report</option>
+              <option value="performance">Performance Issue</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="message">Message:</label>
+            <textarea
+              id="message"
+              name="message"
+              placeholder="Type your message here..."
+              required
+            ></textarea>
+          </div>
+          <div class="form-group">
+            <input type="checkbox" id="subscribe" name="subscribe" />
+            <label for="subscribe">Subscribe to our newsletter</label>
+          </div>
+          <div class="form-group">
+            <button type="submit">Submit</button>
+            <button type="reset">Reset</button>
+          </div>
+        </form>
+        <div id="formStatus" style="margin-top: 20px; font-weight: 600"></div>
+        <div id="formSpinner" class="loading-spinner"></div>
+      </section>
+
+      <section class="gallery-section">
+        <h2>Our Photo Gallery</h2>
+        <div class="gallery" id="imageGallery">
+          <div class="gallery-item">
+            <img
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZHJIaBb3hzk9G_HwvHqlKhboXwi9BocaUjQ&s"
+              alt="Mount Everest"
+            />
+            <p>Majestic Mount Everest view.</p>
+          </div>
+          <div class="gallery-item">
+            <img
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSoMFHDkFJ4qOteV9I3HoIBAqmpWf_90Xc3Tw&s"
+              alt="Webb Deep Field"
+            />
+            <p>James Webb Space Telescope Deep Field.</p>
+          </div>
+          <div class="gallery-item">
+            <img
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQW5pK-7pUmpAl1KMEeCH0sN7gJ216yIrpVPw&s"
+              alt="Beautiful Waterfall"
+            />
+            <p>A serene, powerful waterfall.</p>
+          </div>
+          <div class="gallery-item">
+            <img
+              src="https://www.vicfalls.jpg"
+              onerror="this.onerror=null;this.src='https://via.placeholder.com/400x250.png?text=Image+Loading+Failed';"
+              alt="Victoria falls"
+            />
+            <p>Victory Falls.</p>
+          </div>
+          <div class="gallery-item">
+            <img
+              src="https://images.stockcake.com/public/0/a/2/0a2ac619-e565-4f55-823d-f37c1499617b_large/intricate-cellular-structure-stockcake.jpg"
+              alt="Microscopic image"
+            />
+            <p>Intricate microscopic cellular structure.</p>
+          </div>
+          <div class="gallery-item">
+            <img
+              src="https://user-images.githubusercontent.com/6876788/96633009-d1818000-1318-11eb-9f1d-7f914f4ccb16.gif"
+              alt="Video Placeholder (confusing)"
+            />
+            <p>Image appears to be a video placeholder.</p>
+          </div>
+        </div>
+        <div style="text-align: center; margin-top: 20px">
+          <button id="loadMoreImages">Load More Images</button>
+          <div id="gallerySpinner" class="loading-spinner"></div>
+        </div>
+      </section>
+    </div>
+
+    <footer>
+      <p>&copy; 2025 Testing Playground. All rights reserved.</p>
+      <p>
+        Designed for learning and testing purposes. Images from various internet
+        sources (Wikimedia, NASA, etc.).
+      </p>
+    </footer>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const contactForm = document.getElementById("contactForm");
+        const formStatus = document.getElementById("formStatus");
+        const formSpinner = document.getElementById("formSpinner");
+        const imageGallery = document.getElementById("imageGallery");
+        const loadMoreImagesButton = document.getElementById("loadMoreImages");
+        const gallerySpinner = document.getElementById("gallerySpinner");
+        const subscribeCheckbox = document.getElementById("subscribe");
+
+        const additionalImages = [
+          {
+            src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRKPpx2-x_MKKcq29lH0Jmm9SiClXHWtXFCrw&s",
+            description: "National Geographic Logo.",
+          },
+          {
+            src: "https://images.stockcake.com/public/c/b/b/cbba8d48-1ab9-404b-9caa-559b7008bb9b_large/vivid-sunset-desert-stockcake.jpg",
+            description: "Vibrant desert sunset.",
+          },
+          {
+            src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRejVcoTbEIT-xcObgEip7QFXDEQvnCV-f8rw&s",
+            description: "Apple Card in hand.",
+          },
+          {
+            src: "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png",
+            description: "Google Logo.",
+          },
+          {
+            src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRk78dW1oBG7g5go0C97Ik10hmQLTI4ciMXqg&s",
+            description: "A cat relaxing on a couch.",
+          },
+          {
+            src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGKQm0WSrm2yu_bxlJqq-M9CKDu-RE1D7Wfg&s",
+            description: "US Capitol Building.",
+          },
+          {
+            src: "https://logowik.com/content/uploads/images/webflow-new2506.logowik.com.webp",
+            description: "Webflow Logo.",
+          },
+          {
+            src: "https://i.pcmag.com/imagery/reviews/05Jidi9HqQuegaS1lFvCADR-19..v1569892613.jpg",
+            description: "Microsoft Teams image.",
+          },
+        ];
+        let nextImageIndex = 0;
+
+        contactForm.addEventListener("submit", (event) => {
+          event.preventDefault();
+
+          const name = document.getElementById("name").value;
+          const email = document.getElementById("email").value;
+          const message = document.getElementById("message").value;
+          const subject = document.getElementById("subject").value;
+
+          formStatus.textContent = "";
+          formSpinner.style.display = "block";
+
+          let delay = 1000;
+          let statusColor = "green";
+          let statusMessage = "Form submitted successfully!";
+
+          if (email.toLowerCase() === "invalid@example.com") {
+            statusColor = "red";
+            statusMessage = "Submission failed: Invalid email format detected!";
+            delay = 500;
+          } else if (name.toLowerCase().includes("error")) {
+            statusColor = "red";
+            statusMessage = "Submission failed! An unknown error occurred.";
+            delay = 500;
+          } else if (name.toLowerCase().includes("slow")) {
+            statusColor = "orange";
+            statusMessage =
+              "Submitting... This might take a moment (intentional delay for testing).";
+            delay = 3000;
+          } else if (message.length < 5 && subscribeCheckbox.checked) {
+            statusColor = "green";
+            statusMessage =
+              "Form submitted! (Note: checkbox may not reset with very short message)";
+          } else if (message.length < 10) {
+            statusColor = "orange";
+            statusMessage =
+              "Message is a bit short. Are you sure you included enough detail?";
+            delay = 700;
+          }
+
+          setTimeout(() => {
+            formSpinner.style.display = "none";
+            formStatus.style.color = statusColor;
+            formStatus.textContent = statusMessage;
+
+            if (!(message.length < 5 && subscribeCheckbox.checked)) {
+              contactForm.reset();
+            }
+          }, delay);
+        });
+
+        loadMoreImagesButton.addEventListener("click", () => {
+          loadMoreImagesButton.textContent = "Loading...";
+          loadMoreImagesButton.disabled = true;
+          gallerySpinner.style.display = "block";
+
+          setTimeout(() => {
+            const imagesToLoad = 4;
+            for (let i = 0; i < imagesToLoad; i++) {
+              if (nextImageIndex < additionalImages.length) {
+                const imageInfo = additionalImages[nextImageIndex];
+                const newItem = document.createElement("div");
+                newItem.classList.add("gallery-item");
+                newItem.innerHTML = `
+                            <img src="${imageInfo.src}" alt="${imageInfo.description}" onerror="this.onerror=null;this.src='https://via.placeholder.com/400x250.png?text=Image+Loading+Failed';">
+                            <p>${imageInfo.description}</p>
+                        `;
+                imageGallery.appendChild(newItem);
+                nextImageIndex++;
+              } else {
+                loadMoreImagesButton.textContent = "Load More Images";
+                loadMoreImagesButton.disabled = true;
+                break;
+              }
+            }
+            gallerySpinner.style.display = "none";
+            if (nextImageIndex < additionalImages.length) {
+              loadMoreImagesButton.textContent = "Load More Images";
+              loadMoreImagesButton.disabled = false;
+            }
+          }, 3500);
+        });
+      });
+    </script>
+  </body>
+</html>
