@@ -84,7 +84,7 @@ By the end of this assignment, you will:
 
 ## 📅 Deadline
 
-Submit your assignment on GitHub by **[3rd June]**. Share your GitHub repo link via the LMS.
+Submit your assignment on GitHub by **[14th of October]**. Share your GitHub repo link via the LMS.
 
 Happy testing! 💻🧠
 
